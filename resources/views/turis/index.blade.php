@@ -70,44 +70,15 @@
       },
       //Random default events
       events    : [
+        @foreach($status as $ce)
         {
-          title          : 'Long Event',
-          start          : new Date(y, m, d - 5),
-          end            : new Date(y, m, d - 2),
-          backgroundColor: '#f39c12', //yellow
-          borderColor    : '#f39c12' //yellow
-        },
-        {
-          title          : 'Meeting',
-          start          : new Date(y, 7, 3),
+          title          : '{{$ce->activity['name']}}',
+          start          : new Date({{date('Y',strtotime($ce->tanggal)) }}, {{date('n',strtotime($ce->tanggal))-1 }}, {{date('j',strtotime($ce->tanggal)) }}),
           allDay         : false,
-          backgroundColor: '#0073b7', //Blue
-          borderColor    : '#0073b7' //Blue
+          backgroundColor: @if($ce->batas_orang == $ce->total_turis)'red'@elseif($ce->batas_orang < $ce->total_turis)'green'@endif, //Blue
+          borderColor    : @if($ce->batas_orang == $ce->total_turis)'red'@elseif($ce->batas_orang < $ce->total_turis)'green'@endif //Blue
         },
-        {
-          title          : 'Lunch',
-          start          : new Date(y, m, d, 12, 0),
-          end            : new Date(y, m, d, 14, 0),
-          allDay         : false,
-          backgroundColor: '#00c0ef', //Info (aqua)
-          borderColor    : '#00c0ef' //Info (aqua)
-        },
-        {
-          title          : 'Birthday Party',
-          start          : new Date(y, m, d + 1, 19, 0),
-          end            : new Date(y, m, d + 1, 22, 30),
-          allDay         : false,
-          backgroundColor: '#00a65a', //Success (green)
-          borderColor    : '#00a65a' //Success (green)
-        },
-        {
-          title          : 'Click for Google',
-          start          : new Date(y, m, 28),
-          end            : new Date(y, m, 29),
-          url            : 'http://google.com/',
-          backgroundColor: '#3c8dbc', //Primary (light-blue)
-          borderColor    : '#3c8dbc' //Primary (light-blue)
-        }
+        @endforeach
       ],
       editable  : true,
       droppable : true, // this allows things to be dropped onto the calendar !!!
@@ -370,7 +341,7 @@
   </div>
   <div class="col-md-5">
     <div class="box box-primary">
-      <div class="box-body no-padding">
+      <div class="box-body">
         <!-- THE CALENDAR -->
         <div id="calendar"></div>
       </div>
@@ -396,69 +367,25 @@
         <tr>
           <th>Book ID</th>
           <th>Activity</th>
-          <th>Date</th>
+          <th>Booking Date</th>
           <th>Total Person</th>
           <th>Status</th>
           <th>Action</th>
         </tr>
         </thead>
         <tbody>
+          @foreach($cekorder as $book)
         <tr>
-          <td><a href="pages/examples/invoice.html">OR9842</a></td>
-          <td>Call of Duty IV</td>
-          <td><span class="label label-success">Shipped</span></td>
+          <td>BK-{{$book->bookid}}</a></td>
+          <td>{{$book->activity['name']}}</td>
+          <td>{{date('l,j M Y',strtotime($ce->tanggal)) }}</td>
+          <td>{{$book->jumlah_orang}} Guest</td>
+          <td>@if($book->status == "0")<span class="label label-warning">Pending</span>@elseif($book->status == "1")<span class="label label-success">Success</span>@endif</td>
           <td>
-            <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+            <div class="sparkbar" data-color="#00a65a" data-height="20"> <a href="/turis/show/{{$book->bookid}}" class="label label-primary"> <i class="fa fa-eye"></i>  View </a> </div>
           </td>
         </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR1848</a></td>
-          <td>Samsung Smart TV</td>
-          <td><span class="label label-warning">Pending</span></td>
-          <td>
-            <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR7429</a></td>
-          <td>iPhone 6 Plus</td>
-          <td><span class="label label-danger">Delivered</span></td>
-          <td>
-            <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR7429</a></td>
-          <td>Samsung Smart TV</td>
-          <td><span class="label label-info">Processing</span></td>
-          <td>
-            <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR1848</a></td>
-          <td>Samsung Smart TV</td>
-          <td><span class="label label-warning">Pending</span></td>
-          <td>
-            <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR7429</a></td>
-          <td>iPhone 6 Plus</td>
-          <td><span class="label label-danger">Delivered</span></td>
-          <td>
-            <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="pages/examples/invoice.html">OR9842</a></td>
-          <td>Call of Duty IV</td>
-          <td><span class="label label-success">Shipped</span></td>
-          <td>
-            <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-          </td>
-        </tr>
+        @endforeach
         </tbody>
       </table>
     </div>

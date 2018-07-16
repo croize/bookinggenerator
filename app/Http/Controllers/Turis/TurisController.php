@@ -7,20 +7,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Booking;
 use App\Activity;
+use App\Datebook;
 use DB;
 use Auth;
 
 class TurisController extends Controller
 {
-  public function __construct()
-  {
-      $this->middleware('auth');
-      $this->middleware('level:1');
-  }
   public function index()
   {
     $data = Activity::all();
-    return view('turis.index',compact('data'));
+    $status = Datebook::all();
+    return view('welcome',compact('data','status'));
   }
 
   public function book(Request $request)
@@ -35,7 +32,6 @@ class TurisController extends Controller
     $cekturis = DB::table('table_date_activity')->where([['tanggal', '=', $request->tanggal],['activity_id', '=', $request->activity]])->value('total_turis');
     $ceksisaturis = $cekbatas - $cekturis;
     $sa->price = $cekharga * $request->jumlah_orang;
-    $sa->user_id = Auth::user()->id;
     if ($cekbatas != NULL && $cekturis != NULL) {
         if ($ceksisaturis < $request->jumlah_orang) {
         return redirect('turis')->with('error','Sorry your selected date is full for your request guest. Available for '.$ceksisaturis.' guest');

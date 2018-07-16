@@ -11,18 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::prefix('admin')->group(function () {
   Route::get('','Admin\AdminController@index');
 });
 
-Route::prefix('turis')->group(function () {
-  Route::get('','Turis\TurisController@index');
-  Route::post('book','Turis\TurisController@book');
-});
+Route::get('/turis','Turis\TurisController@index');
+Route::post('/turis/book','Turis\TurisController@book');
 
 Route::get('/error', function () {
     return view('404');

@@ -11,4 +11,8 @@ class Activity extends Model
   {
     return $this->hasMany('App\Booking');
   }
+  public function datebook()
+  {
+    return $this->hasMany('App\Datebook');
+  }
 }
